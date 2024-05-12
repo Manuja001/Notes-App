@@ -3,5 +3,9 @@
     <string name="Add_Btn">ADD</string>
     <string name="addNote">Add Note</string>
     <string name="Title">Enter the Title</string>
-    <string name="Descrition">Enter the Desciption here</string>
+    <string name="Descrition">Enter the Description here</string>
+    <string name="Note_Heading">Notes...</string>
+    <string name="DisplayTitle">Title</string>
+    <string name="content_display">Content</string>
+    <string name="Update">Update Notes</string>
 </resources>

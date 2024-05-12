@@ -27,7 +27,7 @@ class NoteDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATABASE
         onCreate(p0)
     }
 
-    // Add the following functions to the NoteDatabaseHelper class
+    // Insert data into the database
 
     fun insertData(note: Note){
         val db = this.writableDatabase
@@ -35,36 +35,52 @@ class NoteDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATABASE
         db.execSQL(query)
         db.close()
     }
-//
-//    fun readData() : MutableList<Note>{
-//        val list : MutableList<Note> = ArrayList()
-//        val db = this.readableDatabase
-//        val query = "SELECT * FROM $TABLE_NAME"
-//        val result = db.rawQuery(query, null)
-//        if(result.moveToFirst()){
-//            do{
-//                val note = Note()
-//                note.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
-//                note.title = result.getString(result.getColumnIndex(COL_TITLE))
-//                note.description = result.getString(result.getColumnIndex(COL_DESCRIPTION))
-//                list.add(note)
-//            }while (result.moveToNext())
-//        }
-//        result.close()
-//        db.close()
-//        return list
-//    }
-//
-//    fun updateData(note: Note){
-//        val db = this.writableDatabase
-//        val query = "UPDATE $TABLE_NAME SET $COL_TITLE = '${note.title}', $COL_DESCRIPTION = '${note.description}' WHERE $COL_ID = ${note.id}"
-//        db.execSQL(query)
-//    }
-//
-//    fun deleteData(note: Note){
-//        val db = this.writableDatabase
-//        val query = "DELETE FROM $TABLE_NAME WHERE $COL_ID = ${note.id}"
-//        db.execSQL(query)
-//    }
+
+    // Get all notes from the database
+
+    fun getAllNotes(): List<Note>{
+        val notes = mutableListOf<Note>()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM $TABLE_NAME"
+        val cursor = db.rawQuery(query, null)
+
+       while (cursor.moveToNext()){
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID))
+            val title = cursor.getString(cursor.getColumnIndexOrThrow(COL_TITLE))
+            val description = cursor.getString(cursor.getColumnIndexOrThrow(COL_DESCRIPTION))
+            val note = Note(id, title, description)
+            notes.add(note)
+        }
+        cursor.close()
+        db.close()
+        return notes
+    }
+
+    // Update a note in the database
+
+    fun updateData(note: Note){
+        val db = this.writableDatabase
+        val query = "UPDATE $TABLE_NAME SET $COL_TITLE = '${note.title}', $COL_DESCRIPTION = '${note.description}' WHERE $COL_ID = ${note.id}"
+        db.execSQL(query)
+        db.close()
+    }
+
+    // Get a note by ID
+
+    fun getNoteById(id: Int): Note?{
+        val db = this.readableDatabase
+        val query = "SELECT * FROM $TABLE_NAME WHERE $COL_ID = $id"
+        val cursor = db.rawQuery(query, null)
+        var note: Note? = null
+        if (cursor.moveToFirst()){
+            val title = cursor.getString(cursor.getColumnIndexOrThrow(COL_TITLE))
+            val description = cursor.getString(cursor.getColumnIndexOrThrow(COL_DESCRIPTION))
+            note = Note (id, title, description)
+        }
+        cursor.close()
+        db.close()
+        return note
+
+    }
 
 }
