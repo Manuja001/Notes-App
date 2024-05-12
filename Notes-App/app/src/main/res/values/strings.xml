@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Notes-App</string>
+    <string name="Add_Btn">ADD</string>
+    <string name="addNote">Add Note</string>
+    <string name="Title">Enter the Title</string>
+    <string name="Descrition">Enter the Desciption here</string>
 </resources>
